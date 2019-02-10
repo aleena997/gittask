@@ -9,6 +9,12 @@ class RecipeScraper(scrapy.Spider):
 		item= contentItem()
 		name= response.css('.gel-trafalgar.content-title__text::text').extract_first()
 		image= response.css('.recipe-media__image').xpath('@src').extract_first()
+		prep_time=response.css('.recipe-metadata__prep-time::text').extract_first()
+		cook_time=response.css('.recipe-metadata__cook-time::text').extract_first()
+		serves=response.css('.recipe-metadata__serving::text').extract_first()
 		item['name']=name
 		item['image']=image
+		item['prep_time']=prep_time
+		item['cook_time']=cook_time
+		item['serves']=serves
 		yield item
