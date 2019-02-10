@@ -13,10 +13,12 @@ class RecipeScraper(scrapy.Spider):
 		cook_time=response.css('.recipe-metadata__cook-time::text').extract_first()
 		serves=response.css('.recipe-metadata__serving::text').extract_first()
 		cook=response.css('.chef__link::text').extract_first()
+		discription=response.css('p.recipe-description__text::text').extract()
 		item['name']=name
 		item['image']=image
 		item['prep_time']=prep_time
 		item['cook_time']=cook_time
 		item['serves']=serves
 		item['cook']=cook
+		item['discription']=discription
 		yield item
