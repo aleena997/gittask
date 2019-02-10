@@ -14,6 +14,9 @@ class RecipeScraper(scrapy.Spider):
 		serves=response.css('.recipe-metadata__serving::text').extract_first()
 		cook=response.css('.chef__link::text').extract_first()
 		discription=response.css('p.recipe-description__text::text').extract()
+		s=response.css('.recipe-ingredients__list-item::text,.recipe-ingredients__link::text').extract()
+		ingredients=""
+		ingredients=ingredients.join(s)
 		item['name']=name
 		item['image']=image
 		item['prep_time']=prep_time
@@ -21,4 +24,5 @@ class RecipeScraper(scrapy.Spider):
 		item['serves']=serves
 		item['cook']=cook
 		item['discription']=discription
+		item['ingredients']=ingredients
 		yield item
