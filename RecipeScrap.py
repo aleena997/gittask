@@ -17,6 +17,7 @@ class RecipeScraper(scrapy.Spider):
 		s=response.css('.recipe-ingredients__list-item::text,.recipe-ingredients__link::text').extract()
 		ingredients=""
 		ingredients=ingredients.join(s)
+		imageUrl=response.css('.chef__image-link').xpath('@href').extract()
 		item['name']=name
 		item['image']=image
 		item['prep_time']=prep_time
@@ -25,4 +26,5 @@ class RecipeScraper(scrapy.Spider):
 		item['cook']=cook
 		item['discription']=discription
 		item['ingredients']=ingredients
+		item['imageurl']=imageUrl
 		yield item
