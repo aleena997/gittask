@@ -8,5 +8,7 @@ class RecipeScraper(scrapy.Spider):
 	def parse(self, response):
 		item= contentItem()
 		name= response.css('.gel-trafalgar.content-title__text::text').extract_first()
+		image= response.css('.recipe-media__image').xpath('@src').extract_first()
 		item['name']=name
+		item['image']=image
 		yield item
