@@ -15,6 +15,15 @@ class RecipeScraper(scrapy.Spider):
 				nextpage=next_page_url.extract_first()
 				next_page=response.urljoin(nextpage)
 				yield scrapy.Request(url=next_page,callback=self.parse)
+		recipe_no_image=response.css('li.article.no-image')
+		for recipe in recipe_no_image:
+			for href in recipe.css('div.left h3 a::attr(href)'):
+				url=response.urljoin(href.extract())
+				yield scrapy.Request(url,callback=self.parse_contents)
+				next_page_url=response.css('li.pagInfo-page-numbers-next a::attr(href)')
+				nextpage=next_page_url.extract_first()
+				next_page=response.urljoin(nextpage)
+				yield scrapy.Request(url=next_page,callback=self.parse)
 	def parse_contents(self, response):
 		item= contentItem()
 		name= response.css('.gel-trafalgar.content-title__text::text').extract_first()
