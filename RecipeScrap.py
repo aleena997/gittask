@@ -3,9 +3,15 @@ from ..items import contentItem
 
 class RecipeScraper(scrapy.Spider):
 	name='recipes'
-	allowed_domain=['http://www.bbc.co.uk/food/recipes/search?cuisines[]=british']
-	start_urls=['http://www.bbc.co.uk/food/recipes/bunny_chow_38916']
+	start_urls=['http://www.bbc.co.uk/food/recipes/search?cuisines[]=british']
+			
 	def parse(self, response):
+		recipe_with_image=response.css('li.article.with-image')
+		for recipe in recipe_with_image:
+			for href in recipe.css('div.left.with-image h3 a::attr(href)'):
+				url=response.urljoin(href.extract())
+				yield scrapy.Request(url,callback=self.parse_contents)
+	def parse_contents(self, response):
 		item= contentItem()
 		name= response.css('.gel-trafalgar.content-title__text::text').extract_first()
 		image= response.css('.recipe-media__image').xpath('@src').extract_first()
@@ -28,3 +34,4 @@ class RecipeScraper(scrapy.Spider):
 		item['ingredients']=ingredients
 		item['imageurl']=imageUrl
 		yield item
+
